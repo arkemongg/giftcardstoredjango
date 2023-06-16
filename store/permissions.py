@@ -4,7 +4,6 @@ from core.models import User
 
 class IsAdminUserOrReadOnly(BasePermission):
     def has_permission(self, request, view):
-        #print(request.user.__dict__)
         if request.method in permissions.SAFE_METHODS:
             return True
         return bool(request.user and request.user.is_staff)
