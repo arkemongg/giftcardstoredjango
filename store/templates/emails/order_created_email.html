@@ -1,0 +1,25 @@
+{% block subject %} Order Has Been Created #{{ order.id }} {% endblock %}
+
+{% block html_body %}
+    <style>
+        /* Define your CSS styles here */
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        
+        p {
+            color: #555;
+            font-size: 16px;
+        }
+        
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+    
+    <h1 style="color: #333; font-size: 24px;">Hello, {{ order.customer }}!</h1>
+    <p style="color: #555; font-size: 16px;">Your Order has been created.</p>
+    <p style="color: #555; font-size: 16px;">Please <a href="{{ order.payment_url }}" style="color: #007bff; text-decoration: none;">click here</a> to complete the payment.</p>
+{% endblock %}
