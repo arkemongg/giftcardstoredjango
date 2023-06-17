@@ -3,7 +3,7 @@ import django.db.models
 from requests import Response
 from rest_framework import serializers
 from store.models import (Address, Cart, CartItem, Category, CategoryImage, Customer, Order,
-    orderItems, Products)
+    orderItems, Products, ProductsImage)
 from django.db import transaction
 
 from .signals import order_created
@@ -11,6 +11,16 @@ from django.utils import timezone
 import http.client
 import json
 from django.http import JsonResponse, HttpResponse
+
+
+class ProductsImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryImage
+        fields = ['id','image']
+    def create(self, validated_data):
+        product_id = self.context['product_pk']
+        product_image = ProductsImage.objects.create(product_id = product_id,**validated_data)
+        return product_image
 
 class SimpleCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,8 +30,9 @@ class SimpleCategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
-        fields = ['id','title','description','price','inventory','category']
+        fields = ['id','title','description','price','inventory','category','image']
     category = SimpleCategorySerializer()
+    image = ProductsImageSerializer(many=True,read_only = True)
 
 class CategoryImageSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -36,9 +47,9 @@ class CategorySerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Category
-        fields = ['id','title','description','categoryImage']
+        fields = ['id','title','description','image']
 
-    categoryImage = CategoryImageSerializer(many = True)
+    image = CategoryImageSerializer(many = True)
 
 
 class SimpleProductSerializer(serializers.ModelSerializer):

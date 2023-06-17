@@ -20,13 +20,9 @@ class Category(models.Model):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 class CategoryImage(models.Model):
-    category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='categoryImage')
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='image')
     image = models.ImageField(upload_to='store/image')
 
-
-
-
-    
 
 class Products(models.Model):
     title = models.CharField(max_length=265)
@@ -44,7 +40,7 @@ class Products(models.Model):
         verbose_name_plural = "Products"
 
 class ProductsImage(models.Model):
-    products = models.ForeignKey(Products,on_delete=models.CASCADE,related_name='productImage')
+    product = models.ForeignKey(Products,on_delete=models.CASCADE,related_name='image')
     image = models.ImageField(upload_to='store/image')
 
 class Customer(models.Model):

@@ -2,7 +2,8 @@ import django.db.models
 from django.utils.html import format_html
 from django.contrib import admin
 
-from store.models import Cart, CartItem, Category, CategoryImage, Order, orderItems, Products
+from store.models import (Cart, CartItem, Category, CategoryImage, Order, orderItems, Products,
+    ProductsImage)
 
 # Register your models here.
 
@@ -59,4 +60,8 @@ class OrderItemsAdmin(admin.ModelAdmin):
 @admin.register(CategoryImage)
 class CategoryImageAdmin(admin.ModelAdmin):
     list_display = ['pk','category','image']
+
+@admin.register(ProductsImage)
+class CategoryImageAdmin(admin.ModelAdmin):
+    list_display = ['pk','image']
     
