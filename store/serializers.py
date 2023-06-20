@@ -55,10 +55,16 @@ class CategorySerializer(serializers.ModelSerializer):
 class SimpleProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
-        fields = ['id','title','price','category']
+        fields = ['id','title','price','category','image']
 
     category = SimpleCategorySerializer()
-
+    image = ProductsImageSerializer(many=True,read_only = True)
+    def get_image_url(self, obj):
+        if obj.image.exists():
+            image_path = obj.image.first().image.url
+            return self.context['request'].build_absolute_uri(image_path)
+        else:
+            return None
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:

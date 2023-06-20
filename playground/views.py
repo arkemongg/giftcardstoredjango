@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.http import HttpResponse
 import json
 from django.conf import settings
@@ -8,8 +9,22 @@ import hashlib
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from background_task import background , tasks
+
+
+@background
+def notify_usersssss():
+    print("sceduled")
+
+def schedule_task():
+    target_time = timezone.now() + timezone.timedelta(seconds=20)
+    notify_usersssss(schedule=target_time)
 
 def hello(request):
+    current_time = timezone.now()
+    target_time = current_time + timezone.timedelta(seconds=10)
+    print(target_time)
+    notify_usersssss(repeat=7200)
     return HttpResponse("Hi")
 
 

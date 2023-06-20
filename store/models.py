@@ -43,6 +43,7 @@ class ProductsImage(models.Model):
     product = models.ForeignKey(Products,on_delete=models.CASCADE,related_name='image')
     image = models.ImageField(upload_to='store/image')
 
+
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
     MEMBERSHIP_SILVER = 'S'

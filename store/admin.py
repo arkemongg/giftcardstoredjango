@@ -7,15 +7,64 @@ from store.models import (Cart, CartItem, Category, CategoryImage, Order, orderI
 
 # Register your models here.
 
+class ProductImageAdmin(admin.StackedInline):
+    model = ProductsImage
+    list_display = ['pk', 'image']
+    extra = 1
+    readonly_fields = ['formatted_image']
+    def formatted_image(self, instance):
+        if instance.image:
+            return format_html('<img src="{}" width="200" />', instance.image.url)
+        else:
+            return '(No image)'
+
 @admin.register(Products)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id','title','price','inventory']
+    list_display = ['id', 'title', 'price','display_image', 'inventory']
     list_editable = ['price']
     list_per_page = 10
+    inlines = [ProductImageAdmin]
 
+    def display_image(self, obj):
+        if obj.image.exists():
+            image_url = obj.image.first().image.url  # Assuming you have an ImageField in ProductsImage model
+            return format_html('<img src="{}" width="100" height="100" />', image_url)
+        else:
+            return 'No image'
+
+@admin.register(ProductsImage)
+class ProductsImageAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'image','formatted_image']
+    readonly_fields = ['formatted_image']
+    def formatted_image(self, instance):
+        if instance.image:
+            return format_html('<img src="{}" width="200" />', instance.image.url)
+        else:
+            return '(No image)'
+
+
+    
+class CategoryInline(admin.StackedInline):
+    model = CategoryImage
+    list_display = ['pk', 'image']
+    extra = 1
+    readonly_fields = ['formatted_image']
+    def formatted_image(self, instance):
+        if instance.image:
+            return format_html('<img src="{}" width="200" />', instance.image.url)
+        else:
+            return '(No image)'
 @admin.register(Category)
-class CategoryAdmn(admin.ModelAdmin):
-    list_display = ['id','title','description']
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['id','title','description','display_image']
+    inlines = [CategoryInline]
+
+    def display_image(self, obj):
+        if obj.image.exists():
+            image_url = obj.image.first().image.url  # Assuming you have an ImageField in ProductsImage model
+            return format_html('<img src="{}" width="100" height="100" />', image_url)
+        else:
+            return 'No image'
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
@@ -61,7 +110,3 @@ class OrderItemsAdmin(admin.ModelAdmin):
 class CategoryImageAdmin(admin.ModelAdmin):
     list_display = ['pk','category','image']
 
-@admin.register(ProductsImage)
-class CategoryImageAdmin(admin.ModelAdmin):
-    list_display = ['pk','image']
-    

@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-24xse^uhm)ikyw#a-)gam+44x4)9+_dx2o$*#eubncac801_+r'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','2ca0-103-96-37-225.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1','a4b6-103-96-37-225.ngrok-free.app']
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5500',
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "debug_toolbar",
     'djoser',
+    'background_task',
     'corsheaders',
     'django_filters',
     'playground',

@@ -23,5 +23,4 @@ from giftcardstore.settings import DEBUG, MEDIA_ROOT, MEDIA_URL
 urlpatterns = [
     # path('coinbase-webhook/', coinbase_webhook, name='coinbase_webhook'),
     path('hello/', hello, name='hello'),
-
 ]

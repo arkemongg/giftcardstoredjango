@@ -1,7 +1,7 @@
 
 from store.permissions import IsAdminUserOrReadOnly
 from core.models import User
-from store.tasks import update_order_status
+from store.tasks import update_order_status, update_order_status_django_bg
 from store.pagination import DefaultLimitOffset, DefaultPagination
 from .models import Address, Cart, CartItem, Category, Customer, Order, orderItems, Products
 from django.shortcuts import render
@@ -178,7 +178,8 @@ def coinbase_webhook(request):
         payload = json.loads(request.body)
         print(payload)
         print(payload['event']['type'])
-        update_order_status.delay(payload['event']['data']['metadata']['order_id'],payload['event']['type'])
+        #update_order_status.delay(payload['event']['data']['metadata']['order_id'],payload['event']['type'])
+        update_order_status_django_bg(payload['event']['data']['metadata']['order_id'],payload['event']['type'])
         return HttpResponse(status=200)
     else:
         return HttpResponseBadRequest('Invalid request method')
