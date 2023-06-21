@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','a4b6-103-96-37-225.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5500',
@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'giftcardstore.urls'
@@ -128,10 +129,12 @@ DJOSER = {
         'user': 'core.serializers.UserSerializer',
         'current_user': 'core.serializers.UserSerializer',
         'token_create': 'core.serializers.TokenCreateSerializer',
+        'current_password': 'core.serializers.CurrentPasswordSerializer',
     },
     'EMAIL': {
         'activation': 'core.email.ActivationEmail',
         'password_reset': 'core.email.PasswordResetEmail',
+        'password_changed_confirmation': 'core.email.PasswordChangedEmail',
     },
     'SEND_CONFIRMATION_EMAIL': True,
     'SET_USERNAME_RETYPE': True,
@@ -139,6 +142,7 @@ DJOSER = {
     'ACTIVATION_URL': '/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND':True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
 }
 
 
@@ -178,6 +182,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')

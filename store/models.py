@@ -62,7 +62,6 @@ class Customer(models.Model):
 
     def first_name(self):
         return self.user.first_name
-
     def last_name(self):
         return self.user.last_name
     def __str__(self) -> str:
@@ -99,6 +98,7 @@ class Order(models.Model):
     
     order_status = models.CharField(max_length=1,choices=ORDER_STATUS_CHOICES,default=ORDER_STATUS_PENDING)
     payment_url = models.CharField(max_length=265,default='-')
+    payment_url_for_admin = models.CharField(max_length=265,default='-')
     payment_status = models.CharField(max_length=1,choices=PAYMENT_STATUS_CHOICES,default=PAYMENT_STATUS_PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     customer = models.ForeignKey(Customer,models.PROTECT)

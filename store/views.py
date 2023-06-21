@@ -11,6 +11,7 @@ from django.db.models import F,Sum,Value
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from store.serializers import (AddCartItemSerializer, AddressSerializer, CartItemSerializer,
@@ -38,14 +39,13 @@ class ProductsViewSet(ModelViewSet):
     def get_queryset(self):
         if self.request.method == 'GET':
             print(self.request.META.get('HTTP_USER_AGENT',''))
-            return Products.objects.select_related('category')
+            return Products.objects.select_related('category').prefetch_related('image')
     permission_classes = [IsAdminUserOrReadOnly]
 
 class CategoryViewSet(RetrieveModelMixin,ListModelMixin,GenericViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CategorySerializer
-    queryset = Category.objects.all()
-
+    queryset = Category.objects.prefetch_related('image').all()
     def get_serializer_context(self):
         return super().get_serializer_context()
 
@@ -58,13 +58,14 @@ class OrderViewSet(ListModelMixin,CreateModelMixin,RetrieveModelMixin,GenericVie
         return OrderSerializer
     def get_queryset(self):
         try:
-            customer_id = Customer.objects.only('id').get(user_id = self.request.user.id)
+            customer = Customer.objects.only('id').get(user_id=self.request.user.id)
+            customer_id = customer.id
             # orders = Order.objects.filter(customer_id = customer_id).order_by('-created_at')
             
             # for order in orders:
             #     print(order.customer.user.email)
 
-            return Order.objects.filter(customer_id = customer_id).order_by('-created_at')
+            return Order.objects.prefetch_related('items').prefetch_related('items__product__image').prefetch_related('items__product__category').select_related('customer').filter(customer_id = customer_id).order_by('-created_at')
         except :
             pass
     def get_serializer_context(self):
@@ -75,16 +76,23 @@ class OrderViewSet(ListModelMixin,CreateModelMixin,RetrieveModelMixin,GenericVie
     def last_order(self,request):
         try:
             customer_id = Customer.objects.only('id').get(user_id = self.request.user.id)
-            serializer = OrderSerializer(Order.objects.filter(customer_id = customer_id).latest('id'))
+            serializer = OrderSerializer(Order.objects.prefetch_related('items').filter(customer_id = customer_id).latest('id'))
             return Response(serializer.data)
         except:
             raise serializers.ValidationError('No Order Found')
 
 class OrderItemsViewSet(ListModelMixin,RetrieveModelMixin,GenericViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
-    
     def get_queryset(self,*args, **kwargs):
-        return orderItems.objects.filter(order_id = Value(self.kwargs['order_pk']))
+        if self.request.user.id == None:
+            raise ValidationError({"detail": "BAD REQUEST"})
+        
+        order = Order.objects.get(id = Value(self.kwargs['order_pk']))
+        customer = Customer.objects.only('id').get(user_id=self.request.user.id)
+        customer_id = customer.id
+        if order.customer.id != customer_id:
+            raise ValidationError({"detail": "Invalid customer for this order"})
+        return orderItems.objects.filter(order_id=self.kwargs['order_pk'])
     serializer_class = OrderItemSerializer
 
 class CartViewSet(ListModelMixin,GenericViewSet,RetrieveModelMixin,CreateModelMixin,DestroyModelMixin):
@@ -97,7 +105,7 @@ class CartViewSet(ListModelMixin,GenericViewSet,RetrieveModelMixin,CreateModelMi
             total = 0
             for item in items :
                 total += item.quantity * item.product.price
-            cart = Cart.objects.prefetch_related('items__product').annotate(total_price = Value(total))
+            cart = Cart.objects.prefetch_related('items').prefetch_related('items__product').prefetch_related('items__product__image').prefetch_related('items__product__category').annotate(total_price = Value(total))
             return cart.order_by('items__added_time')
         except:
             pass
@@ -116,7 +124,7 @@ class CartItemViewSet(ModelViewSet):
         return {
             'cart_pk' : self.kwargs['cart_pk']
         }
-class CustomerViewSet(ListModelMixin,UpdateModelMixin,DestroyModelMixin,GenericViewSet):
+class CustomerViewSet(ListModelMixin,UpdateModelMixin,RetrieveModelMixin,GenericViewSet):
     http_method_names = ['get','put','option','head']
     permission_classes = [IsAuthenticated]
     def get_serializer_class(self):
@@ -127,7 +135,7 @@ class CustomerViewSet(ListModelMixin,UpdateModelMixin,DestroyModelMixin,GenericV
     def get_queryset(self):
             return Customer.objects.filter(user_id = self.request.user.id)
 
-    @action(detail=False, methods=['GET', 'PUT'])
+    @action(detail=False, methods=['GET', 'PUT'],permission_classes = [IsAuthenticated])
     def me(self, request):
         if self.request.method == 'GET':
             customer = Customer.objects.get(user_id=self.request.user.id)
@@ -153,7 +161,7 @@ class AddressViewSet(ModelViewSet):
     def get_queryset(self):
         customer_id = Customer.objects.only('id').get(user_id = self.request.user.id)
         return Address.objects.filter(customer_id = customer_id)
-    @action(detail=False, methods=['GET', 'PUT'])
+    @action(detail=False, methods=['GET', 'PUT'],permission_classes = [IsAuthenticated])
     def me(self, request, customer_pk=None):
         customer_id = Customer.objects.only('id').get(user_id = self.request.user.id)
         address =  Address.objects.get(customer_id = customer_id)

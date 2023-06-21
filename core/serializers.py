@@ -1,8 +1,7 @@
 
-import django.core.mail
-from rest_framework import serializers
-from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer,UserSerializer as BaseUserSerializer , TokenCreateSerializer as BaseTokenCreateSerializer
 
+from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer,UserSerializer as BaseUserSerializer , TokenCreateSerializer as BaseTokenCreateSerializer ,CurrentPasswordSerializer as BaseCurrentPasswordSerializer
 from django.contrib.auth import authenticate, login
 from .models import User
 from rest_framework import status
@@ -31,6 +30,10 @@ class UserSerializer(BaseUserSerializer):
 
 class TokenCreateSerializer(BaseTokenCreateSerializer):
     pass
+class CurrentPasswordSerializer(BaseCurrentPasswordSerializer):
+    pass
+
+
 
 
 

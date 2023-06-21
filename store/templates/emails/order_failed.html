@@ -1,4 +1,4 @@
-{% block subject %} Order Has Been Created #{{ order.id }} {% endblock %}
+{% block subject %} Order Has Been Cancelled #{{ order.id }} {% endblock %}
 
 {% block html_body %}
     <style>
@@ -22,4 +22,5 @@
     <h1 style="color: #333; font-size: 24px;">Hello, {{ order.customer }}!</h1>
     <p style="color: #555; font-size: 16px;">Your payment was failed.</p>
     <p style="color: #555; font-size: 16px;">Your order has beeen cancelled</p>
+    
 {% endblock %}

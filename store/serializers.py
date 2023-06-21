@@ -257,7 +257,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     address = AddressSerializer(many=True)
     class Meta:
         model = Customer
-        fields = ['id','phone','birth_date','membership','address']
+        fields = ['id','phone','birth_date','membership','address','first_name','last_name']
 
     
 class CustomerSerializerPost(serializers.ModelSerializer):

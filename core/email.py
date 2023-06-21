@@ -12,3 +12,6 @@ class ActivationEmail(email.ActivationEmail):
     
 class PasswordResetEmail(email.PasswordResetEmail):
     template_name = 'emails/password_reset.html'
+
+class PasswordChangedEmail(email.PasswordChangedConfirmationEmail):
+    template_name = 'emails/password_changed.html'
