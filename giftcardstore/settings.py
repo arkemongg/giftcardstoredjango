@@ -136,7 +136,7 @@ DJOSER = {
         'password_reset': 'core.email.PasswordResetEmail',
         'password_changed_confirmation': 'core.email.PasswordChangedEmail',
     },
-    'SEND_CONFIRMATION_EMAIL': True,
+    #'SEND_CONFIRMATION_EMAIL': True,
     'SET_USERNAME_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_URL': '/{uid}/{token}',
     'ACTIVATION_URL': '/{uid}/{token}',
@@ -206,4 +206,4 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL')
 COINBASE_API_KEY = os.getenv('COINBASE_API')
 COINBASE_HOOK = os.getenv('COINBASE_SECRET_HOOK')
 
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
+# CELERY_BROKER_URL = 'redis://localhost:6379/1'

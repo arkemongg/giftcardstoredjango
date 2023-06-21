@@ -133,6 +133,11 @@ class CustomerViewSet(ListModelMixin,UpdateModelMixin,RetrieveModelMixin,Generic
         return CustomerSerializer
 
     def get_queryset(self):
+            #security impliment
+            # jwt_token = self.request.META.get('HTTP_AUTHORIZATION', '').split(' ')[1]
+            # banned_jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3NDY3NTczLCJpYXQiOjE2ODczODExNzMsImp0aSI6IjRhYTcwZGZkNmI2YjQ0ZmVhODEwZGM4ZTg1MjE2OTRjIiwidXNlcl9pZCI6Njh9.nNHaX6vVGuvgl04Qcg1xC_Lfa9JYealFUDKEka9IM7U"
+            # if jwt_token == banned_jwt:
+            #     raise serializers.ValidationError({'error':'please login again'})
             return Customer.objects.filter(user_id = self.request.user.id)
 
     @action(detail=False, methods=['GET', 'PUT'],permission_classes = [IsAuthenticated])
