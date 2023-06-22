@@ -28,7 +28,7 @@ class Products(models.Model):
     title = models.CharField(max_length=265)
     description = models.TextField()
     price = models.DecimalField(max_digits=6,decimal_places=2)
-    inventory = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
+    inventory = models.IntegerField(validators=[MinValueValidator(0)])
     last_update = models.DateTimeField(auto_now_add=True)
 
     category = models.ForeignKey(Category,on_delete= models.PROTECT)
