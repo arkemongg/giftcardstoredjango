@@ -37,10 +37,13 @@ CORS_ALLOWED_ORIGINS = [
     'https://giftcardstoreweb.vercel.app'
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'https://web-production-19dd.up.railway.app',
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-19dd.up.railway.app/',
 ]
-
+CSRF_COOKIE_DOMAIN = '.railway.app'
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 # Application definition
 
 INSTALLED_APPS = [
