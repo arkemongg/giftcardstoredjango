@@ -97,11 +97,11 @@ WSGI_APPLICATION = 'giftcardstore.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
-        'HOST':'containers-us-west-48.railway.app',
+        'NAME': 'giftcardstore',
+        'HOST':'localhost',
         'USER':'root',
-        'PORT':'5497',
         'PASSWORD':os.getenv('DB_PASSWORD')
+        
     }
 }
 INTERNAL_IPS = [
