@@ -37,6 +37,10 @@ CORS_ALLOWED_ORIGINS = [
     'https://giftcardstoreweb.vercel.app'
 ]
 
+CORS_ORIGIN_WHITELIST = [
+    'https://web-production-19dd.up.railway.app',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
