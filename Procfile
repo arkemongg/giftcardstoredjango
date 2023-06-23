@@ -1,0 +1,1 @@
+web: gunicorn giftcardstore.wsgi --log-file -
