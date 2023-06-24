@@ -100,8 +100,7 @@ DATABASES = {
         'NAME': 'giftcardstore',
         'HOST':'localhost',
         'USER':'root',
-        'PASSWORD':os.getenv('DB_PASSWORD')
-        
+        'PASSWORD':os.getenv('DB_PASSWORD_LOCAL')
     }
 }
 INTERNAL_IPS = [

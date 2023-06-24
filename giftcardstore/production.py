@@ -27,14 +27,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','web-production-19dd.up.railway.app']
 
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:5500',
-    'http://localhost:5500',
+    'https://giftcardstoreweb.vercel.app'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-19dd.up.railway.app/',
+]
+CSRF_COOKIE_DOMAIN = '.railway.app'
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,6 +63,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -63,7 +71,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
@@ -98,7 +105,7 @@ DATABASES = {
         'HOST':'containers-us-west-48.railway.app',
         'USER':'root',
         'PORT':'5497',
-        'PASSWORD':os.getenv('DB_PASSWORD')
+        'PASSWORD':os.getenv('DB_PASSWORD_RAILWAY')
     }
 }
 INTERNAL_IPS = [
@@ -203,4 +210,3 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL')
 COINBASE_API_KEY = os.getenv('COINBASE_API')
 COINBASE_HOOK = os.getenv('COINBASE_SECRET_HOOK')
 
-# CELERY_BROKER_URL = 'redis://localhost:6379/1'
