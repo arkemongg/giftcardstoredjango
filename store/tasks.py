@@ -51,13 +51,11 @@ def update_order_status_every_three_hours():
 
 def update_order_status_django_bg(order_id,charge_type):
     order = Order.objects.prefetch_related('customer').prefetch_related('customer__user').get(id = order_id)
-    print(order)
     if 'charge:created' == charge_type:
         message = BaseEmailMessage(
         template_name='emails/order_created_email.html',
         context= {'order':order}
         )
-        print('charge:created in background task')
         message.send([order.customer.user.email])
         
     elif 'charge:failed' == charge_type:

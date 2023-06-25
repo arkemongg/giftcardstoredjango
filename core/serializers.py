@@ -17,7 +17,6 @@ class UserCreateSerializer(BaseUserCreateSerializer):
         return attrs
 
     def create(self, validated_data):
-        print(validated_data)
         validated_data.pop('password_confirmation', None)
         return super().create(validated_data)
     

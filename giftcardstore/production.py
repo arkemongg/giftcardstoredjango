@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1','web-production-19dd.up.railway.app']
+ALLOWED_HOSTS = ['web-production-19dd.up.railway.app']
 
 CORS_ALLOWED_ORIGINS = [
     'https://giftcardstoreweb.vercel.app'

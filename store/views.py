@@ -38,7 +38,7 @@ class ProductsViewSet(ModelViewSet):
     search_fields = ['title']
     def get_queryset(self):
         if self.request.method == 'GET':
-            print(self.request.META.get('HTTP_USER_AGENT',''))
+           # print(self.request.META.get('HTTP_USER_AGENT',''))
             return Products.objects.select_related('category').prefetch_related('image')
     permission_classes = [IsAdminUserOrReadOnly]
 
@@ -189,8 +189,8 @@ def coinbase_webhook(request):
         if not verify_coinbase_signature(signature, request.body):
             return HttpResponseBadRequest('Invalid signature')
         payload = json.loads(request.body)
-        print(payload)
-        print(payload['event']['type'])
+        # print(payload)
+        # print(payload['event']['type'])
         #update_order_status.delay(payload['event']['data']['metadata']['order_id'],payload['event']['type'])
         update_order_status_django_bg(payload['event']['data']['metadata']['order_id'],payload['event']['type'])
         return HttpResponse(status=200)
