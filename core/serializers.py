@@ -1,7 +1,6 @@
 
-
 from rest_framework import serializers
-from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer,UserSerializer as BaseUserSerializer , TokenCreateSerializer as BaseTokenCreateSerializer ,CurrentPasswordSerializer as BaseCurrentPasswordSerializer
+from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer,UserSerializer as BaseUserSerializer , TokenCreateSerializer as BaseTokenCreateSerializer ,CurrentPasswordSerializer as BaseCurrentPasswordSerializer,UserDeleteSerializer as BaseUserDeleteSerializer
 from django.contrib.auth import authenticate, login
 from .models import User
 from rest_framework import status
@@ -27,11 +26,25 @@ class UserSerializer(BaseUserSerializer):
     class Meta(BaseUserSerializer.Meta):
         fields = ['email','username','first_name','last_name']
 
+    def validate_email(self,value):
+        data_dict = self.__dict__
+        email = data_dict['_kwargs']['data']['email']
+        return email
+    
+    def update(self, instance, validated_data):
+        validated_data.pop('email', None)
+        return super().update(instance, validated_data)
+    
+
+
 class TokenCreateSerializer(BaseTokenCreateSerializer):
     pass
 class CurrentPasswordSerializer(BaseCurrentPasswordSerializer):
     pass
 
+# class UserDeleteSerializer(BaseUserDeleteSerializer):
+#         def destroy(self):
+#           return super().destroy()
 
 
 

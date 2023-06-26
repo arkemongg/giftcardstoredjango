@@ -108,7 +108,7 @@ class CreateOrderSerializer(serializers.Serializer):
             customer = Customer.objects.get(user_id = self.context['user_id'])
             order = Order.objects.create(customer= customer)
             cartItem = CartItem.objects.filter(cart_id = self.validated_data['cart_id'])
-            print(order.id)
+            # print(order.id)
             order_items = []
             total = 0
             for item in cartItem :
