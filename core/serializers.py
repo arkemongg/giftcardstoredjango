@@ -42,10 +42,6 @@ class TokenCreateSerializer(BaseTokenCreateSerializer):
 class CurrentPasswordSerializer(BaseCurrentPasswordSerializer):
     pass
 
-# class UserDeleteSerializer(BaseUserDeleteSerializer):
-#         def destroy(self):
-#           return super().destroy()
-
 
 
 
