@@ -1,1 +1,1 @@
-web: gunicorn giftcardstore.wsgi --log-file -
+web: python manage.py collectstatic && gunicorn giftcardstore.wsgi --log-file -
